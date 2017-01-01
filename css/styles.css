@@ -1,0 +1,148 @@
+body {
+    font-family: 'Abhaya Libre', serif;
+    /* font-family: 'Taviraj', serif;
+     font-family: 'Alegreya', serif;*/
+    background-color: rgb(37, 37, 35);
+    color: white;
+}
+
+#load {
+    font-size: 4em;
+}
+
+p {
+    font-size: 1.2em;
+}
+
+h1 {
+    text-transform: uppercase;
+    font-size: 4em;
+}
+
+#year-legend {
+    margin-top: 0px;
+}
+
+.annotations path{
+    fill: none;
+    stroke: white;
+}
+
+.annotations text {
+    font-size: 12.5px;
+}
+
+#arrow {
+    fill: white;
+    stroke: white;
+}
+
+.charts {
+    margin-top: 50px;
+}
+
+.averages h4 {
+    display: inline-block;
+}
+
+.axis path,
+.axis line {
+    stroke: white;
+    fill: none;
+}
+
+.text-top {
+    width: 167px;
+}
+
+.graph {
+    float: left;
+}
+
+.graph h4 {
+    width: 100%;
+}
+
+.carbon-dioxide {
+    fill: none;
+    stroke: firebrick;
+    stroke-width: 2;
+}
+
+.overlay {
+    fill: none;
+    pointer-events: all;
+}
+
+.focus line {
+    stroke: white;
+    stroke-width: 2;
+}
+
+text {
+    fill: white;
+    stroke: none;
+}
+
+
+text.label {
+    font-size: 85%;
+    stroke: none;
+}
+
+.opaque {
+    opacity: 0;
+}
+
+.lower {
+    margin-top: 35px;
+}
+
+div svg {
+    display: block;
+}
+
+.overlay {
+    stroke: none;
+}
+
+div.tooltip {
+    position: absolute;
+    text-align: left;
+    width: auto;
+    height: auto;
+    padding: 5px;
+    color: white;
+    background-color: rgba(0, 0, 0, .9);
+    border: 1px solid lightgray;
+    border-radius: 8px;
+    pointer-events: none;
+}
+
+div.tooltip ul {
+    list-style-type: none;
+    padding: 1% 0 1% 3%;
+}
+
+a, a:visited, a:hover {
+    color: orange;
+}
+
+footer {
+    margin-top: 25px;
+}
+
+footer ul {
+    text-align: center;
+}
+
+footer ul li {
+    display: inline;
+    margin-left: 25px;
+    font-size: 1.4em;
+}
+
+.subfooter {
+    margin-top: 50px;
+    margin-bottom: 25px;
+}

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="Visualization of the Temperatures and Carbon Dioxide Levels of the World" />
+    <meta name="keywords" content="Climate Change,Drought,Visualization,Temperatures,Carbon Dioxide" />
+    <title>Temperature Rising</title>
+    <link href="https://fonts.googleapis.com/css?family=Abhaya+Libre|Alegreya|Taviraj" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div class="container-fluid">
+    <div id="note" class="row">
+        <p id="load" class="text-center">Loading ...</p>
+    </div>
+    <div class="row hide">
+        <div class="col-xs-12 col-sm-12 col-lg-12">
+            <h1 class="text-center">Temperature Rising</h1>
+            <h3 class="text-center">A Look at World Temperature Anomalies & CO<sub>2</sub> Levels</h3>
+        </div>
+    </div>
+    <div class="row charts opaque">
+        <div class="col-xs-12 col-offset-sm-1 col-sm-10 col-lg-offset-1 col-lg-10">
+            <p>Temperatures have been slowly rising for a number of years. In the charts below you can see that the late 19th and early
+                20th century were quite cool relative to the rest of the time period, 1880-2016. Temperatures on average continued
+                to rise throughout the 20th century. Notice that there were fewer and fewer instances of below average
+                temperatures. In fact, the last month the world saw below average temperatures was December 1984.
+                Temperature increases really accelerated in the 21st century. December 2015 was the first time world temperatures
+                were more than one degree Celsius or about 1.8 degrees Fahrenheit above average. This started a streak of five straight such months.
+                If this doesn't sound like much, consider that such a rise in your body temperature would likely leave you quite sick.</p>
+            <p>Carbon dioxide, a potent greenhouse gas, was first consistently measured beginning in 1958 by Charles Keeling at the
+                Mauna Loa Observatory in Hawaii. Notice that carbon dioxide levels fluctuate with the seasons, with levels tending to
+                drop during the northern hemisphere's summer as its greater plant mass peaks then. However, the long term
+                trend has shown consistently rising CO<sub>2</sub> levels. Carbon Dioxide levels passed 400 parts per million for a given month in 2014
+                with the long term trend passing 400 parts per million in 2015. CO<sub>2</sub> levels have not been
+                this high in millions of years when temperatures were even warmer than they currently are.</p>
+            <h4 class="text-center">What am I looking at?</h4>
+            <p>Each colored bar represents one month of temperature anomalies or CO<sub>2</sub> levels in the atmosphere. Monthly
+                temperature anomaly measurements date from 1880. Measurements of CO<sub>2</sub> levels in the
+                atmosphere were first measured on a monthly basis in March of 1958. Hover over a bar to see the
+                anomaly/CO<sub>2</sub> levels for that month. Scroll down to see how temperatures and CO<sub>2</sub> levels increase over time.
+                Temperature anomalies are based on climate normals for the 20<sup>th</sup> century.</p>
+            <p></p>
+        </div>
+
+        <div id="temp-graphs" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <h2 class="text-center">Total CO<sub>2</sub> emissions (million metric tons)</h2>
+            <div id="co-two-total" class="col-xs-12 col-sm-12 col-md-12 col-lg-12"></div>
+            <div id="co-two" class="col-xs-12 col-sm-12 col-md-12 col-lg-12"></div>
+            <div id="methane" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <h3 class="text-center">Methane Levels</h3>
+                <h4 class="text-center">(Parts per Billion)</h4>
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-lg-12">
+            <footer>
+                <ul class="list-unstyled">
+                    <li><a href="../index.php">Other Visualizations</a></li>
+                    <li><a href="../western_water">Western Water</a></li>
+                    <li><a href="mailto:farrelldlfarrell@gmail.com">Email</a></li>
+                    <li><a href="https://twitter.com/farrelldlfarrel">Twitter</a></li>
+                </ul>
+            </footer>
+        </div>
+        <div class="col-sm-12 col-lg-12">
+            <div class="col-md-offset-1 subfooter">
+                <h3 class="text-center">Data Sources</h3>
+                <ul class="list-unstyled text-center">
+                    <li><a href="http://cdiac.ornl.gov/ftp/ndp030/global.1751_2013.ems">Carbon Dioxide Information
+                    Analysis Center</a></li>
+                    <li><a href="ftp://aftp.cmdl.noaa.gov/products/trends/co2/co2_mm_mlo.txt">NOAA; Earth System
+                        Research Laboratory - CO<sub>2</sub></a></li>
+                    <li><a href="ftp://aftp.cmdl.noaa.gov/products/trends/ch4/ch4_annmean_gl.txt">NOAA: Earth System
+                        Research Laboratory - Methane</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.3.0/d3.min.js" charset="utf-8"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.11.0/d3-legend.min.js"></script>
+<script src="js/assets/d3-jetpack-v4.min.js"></script>
+<script src="js/assets/swoopy-drag/swoopy-drag.min.js"></script>
+<script src="js/custom.js"></script>
+<script type="text/javascript">
+  /*  var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-47256145-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); */
+</script>
+</body>
+</html>
