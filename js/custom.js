@@ -182,6 +182,12 @@ d3.queue()
         }
 
         function focusHover(chart, data, selector, xScale) {
+            d3.select("body").append("div")
+                .classed("tooltip tips", true)
+                .style("opacity", 0);
+
+            var tipping = d3.selectAll(".tips");
+
             var focus = chart.append("g")
                 .attr("class", "focus")
                 .style("display", "none");
@@ -197,10 +203,10 @@ d3.queue()
                 .attr("class", "overlay")
                 .attr("width", width)
                 .attr("height", height)
-                .on("mouseover touchstart", function() { focus.style("display", null); })
+                .on("mouseover touchstart", function() { d3.selectAll(".focus").style("display", null); })
                 .on("mouseout touchend", function() {
-                    focus.style("display", "none");
-                    tip.transition()
+                    d3.selectAll(".focus").style("display", "none");
+                    tipping.transition()
                         .duration(250)
                         .style("opacity", 0);
                 })
@@ -216,13 +222,13 @@ d3.queue()
                 if(d1 === undefined) d1 = Infinity;
                 var d = x0 - d0.date > d1.date - x0 ? d1 : d0;
                 var transform_values = [(xScale(d.date) + margins.left), margins.top];
-                d3.select(selector + " line.y0").translate(transform_values);
+                d3.selectAll(".carbon-dioxide line.y0").translate(transform_values);
 
-                tip.transition()
+                tipping.transition()
                     .duration(100)
                     .style("opacity", .9);
 
-                tip.html(
+                tipping.html(
                         '<h4 class="text-center">' + d.year + '</h4>' +
                             '<ul class="list-unstyled"' +
                             '<li>Emissions: ' + num_format(d.total) + ' million metric tons</li>' +
