@@ -7,7 +7,7 @@ d3.queue()
             .attr("class", "tooltip")
             .style("opacity", 0);
 
-        var margins = {top: 25, right: 25, bottom: 50, left: 40},
+        var margins = {top: 45, right: 52, bottom: 50, left: 45},
             height = 300 - margins.top - margins.bottom,
             bar_width = 300,
             parse_year = d3.timeParse("%Y"),
@@ -46,16 +46,14 @@ d3.queue()
         var series = stack(co2);
 
         fields.forEach(function(field_name, i) {
-            var title = field_name.split("_");
-
             d3.select("#co-two").append("div")
                 .attr("class", "graph")
                 .attr("id", "graphed" + i);
 
             d3.select("#graphed" + i)
                 .append("h4")
-                .attr("class", "text-center text-top")
-                .text(_.capitalize(title[0]) + ' ' + _.capitalize(title[1]));
+                .attr("class", "text-center")
+                .text(fieldName(field_name));
 
             drawGraph("#graphed" + i, field_name, i);
         });
@@ -84,7 +82,8 @@ d3.queue()
             yScale.domain([4150, 0]);
 
             var xAxis = d3.axisBottom()
-                .scale(xScale);
+                .scale(xScale)
+                .ticks(8);
 
             var yAxis = d3.axisLeft()
                 .scale(yScale);
@@ -114,7 +113,7 @@ d3.queue()
                 .ease(d3.easeSinInOut)
                 .attr("d", co2_line(data));
 
-            focusHover(svg, data, selector, xScale);
+            focusHover(svg, data, xScale, yScale);
         }
 
         function drawStrip(selector, data, co2) {
@@ -181,23 +180,19 @@ d3.queue()
             return add;
         }
 
-        function focusHover(chart, data, selector, xScale) {
-            d3.select("body").append("div")
-                .classed("tooltip tips", true)
-                .style("opacity", 0);
-
-            var tipping = d3.selectAll(".tips");
-
+        function focusHover(chart, data, xScale, yScale) {
             var focus = chart.append("g")
                 .attr("class", "focus")
                 .style("display", "none");
 
-            focus.append("line")
+            focus.append("circle")
                 .attr("class", "y0")
-                .attr("x1", 0)
-                .attr("x2", 0)
-                .attr("y1", 0)
-                .attr("y2", height);
+                .attr("r", 2.5);
+
+            focus.append("text")
+                .attr("class", "y0")
+                .attr("x", 9)
+                .attr("dy", ".35em");
 
             chart.append("rect")
                 .attr("class", "overlay")
@@ -206,9 +201,6 @@ d3.queue()
                 .on("mouseover touchstart", function() { d3.selectAll(".focus").style("display", null); })
                 .on("mouseout touchend", function() {
                     d3.selectAll(".focus").style("display", "none");
-                    tipping.transition()
-                        .duration(250)
-                        .style("opacity", 0);
                 })
                 .on("mousemove touchmove", mousemove)
                 .translate([margins.left, margins.top]);
@@ -218,28 +210,27 @@ d3.queue()
                     i = bisectDate(data, x0, 1),
                     d0 = data[i - 1],
                     d1 = data[i];
-
                 if(d1 === undefined) d1 = Infinity;
                 var d = x0 - d0.date > d1.date - x0 ? d1 : d0;
-                var transform_values = [(xScale(d.date) + margins.left), margins.top];
-                d3.selectAll(".carbon-dioxide line.y0").translate(transform_values);
 
-                tipping.transition()
-                    .duration(100)
-                    .style("opacity", .9);
+                fields.forEach(function(field, i) {
+                    var transform_values = [(xScale(d.date) + margins.left), (yScale(d[field]) + margins.top)];
 
-                tipping.html(
-                        '<h4 class="text-center">' + d.year + '</h4>' +
-                            '<ul class="list-unstyled"' +
-                            '<li>Emissions: ' + num_format(d.total) + ' million metric tons</li>' +
-                            '</ul>'
-
-                    )
-                    .style("top", (d3.event.pageY-108)+"px")
-                    .style("left", (d3.event.pageX-28)+"px");
+                    d3.select("#graphed" + i + " circle.y0").translate(transform_values);
+                    d3.select("#graphed" + i + " text.y0").translate(transform_values)
+                        .tspans(function(e) {
+                            return ["Emissions: " + num_format(d[field]), fieldName(field) + " (" + d.year + ")"];
+                        }, -15);
+                });
             }
 
             return chart;
+        }
+
+        function fieldName(field_name) {
+            var title = field_name.split("_");
+
+            return _.capitalize(title[0]) + ' ' + _.capitalize(title[1])
         }
 
         var rows = d3.selectAll('.row');

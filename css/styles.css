@@ -69,6 +69,11 @@ h1 {
     stroke-width: 2;
 }
 
+circle {
+    fill: white;
+    stroke: white;
+}
+
 .overlay {
     fill: none;
     pointer-events: all;

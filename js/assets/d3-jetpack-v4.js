@@ -54,12 +54,20 @@
     };
 
     function tspans(lines, lh) {
-        return this.selectAll('tspan')
-            .data(lines).enter()
+        this.selectAll('tspan')
+            .data(lines)
+            .enter()
             .append('tspan')
             .text(function(d) { return d; })
-            .attr('x', 0)
-            .attr('dy', function(d, i) { return i ? lh || 15 : 0; });
+            .attr('x', -45)
+            .attr('dy', lh || 15);
+
+        this.selectAll('tspan')
+            .data(lines)
+            .text(function(d) { return d; })
+            .attr('dy', lh || 15);
+
+        return this;
     };
 
     function appendMany(data, name){
