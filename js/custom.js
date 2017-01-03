@@ -7,7 +7,7 @@ d3.queue()
             .attr("class", "tooltip")
             .style("opacity", 0);
 
-        var margins = {top: 45, right: 52, bottom: 50, left: 45},
+        var margins = {top: 45, right: 50, bottom: 50, left: 45},
             height = 300 - margins.top - margins.bottom,
             bar_width = 300,
             parse_year = d3.timeParse("%Y"),
@@ -53,7 +53,7 @@ d3.queue()
             d3.select("#graphed" + i)
                 .append("h4")
                 .attr("class", "text-center")
-                .text(fieldName(field_name));
+                .text(fieldName(field_name, true));
 
             drawGraph("#graphed" + i, field_name, i);
         });
@@ -219,7 +219,7 @@ d3.queue()
                     d3.select("#graphed" + i + " circle.y0").translate(transform_values);
                     d3.select("#graphed" + i + " text.y0").translate(transform_values)
                         .tspans(function(e) {
-                            return ["Emissions: " + num_format(d[field]), fieldName(field) + " (" + d.year + ")"];
+                            return ["Emissions: " + num_format(d[field]), fieldName(field, false) + " (" + d.year + ")"];
                         }, -15);
                 });
             }
@@ -227,10 +227,16 @@ d3.queue()
             return chart;
         }
 
-        function fieldName(field_name) {
+        function fieldName(field_name, full) {
             var title = field_name.split("_");
 
-            return _.capitalize(title[0]) + ' ' + _.capitalize(title[1])
+            if(!full && title[1] == "flaring") {
+                return _.capitalize(title[1]);
+            } else if(!full) {
+                return _.capitalize(title[0]);
+            } else {
+                return _.capitalize(title[0]) + ' ' + _.capitalize(title[1])
+            }
         }
 
         var rows = d3.selectAll('.row');
