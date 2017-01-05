@@ -7,7 +7,7 @@ d3.queue()
             .attr("class", "tooltip")
             .style("opacity", 0);
 
-        var margins = {top: 45, right: 50, bottom: 50, left: 45},
+        var margins = {top: 45, right: 50, bottom: 50, left: 50},
             height = 300 - margins.top - margins.bottom,
             bar_width = 300,
             parse_year = d3.timeParse("%Y"),
