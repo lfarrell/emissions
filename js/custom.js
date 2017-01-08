@@ -10,13 +10,11 @@ d3.queue()
         var margins = {top: 45, right: 50, bottom: 50, left: 50},
             height = 300 - margins.top - margins.bottom,
             bar_width = 300,
+            stream_height = 800 - margins.top - margins.bottom,
+            stream_width = window.innerWidth - margins.left - margins.right,
             parse_year = d3.timeParse("%Y"),
             num_format = d3.format(",");
 
-        var colors = ['#67001f','#b2182b','#d6604d','#f4a582','#fddbc7','#f7f7f7','#d1e5f0','#92c5de','#4393c3','#2166ac','#053061'].reverse();
-        var strip_color = d3.scaleQuantize()
-            .domain(d3.extent(methane, d3.f('mean')))
-            .range(colors);
         var width = 400 - margins.right - margins.left;
 
         co2.forEach(function(d) {
@@ -38,13 +36,93 @@ d3.queue()
         var bisectDate = d3.bisector(function(d) { return d.date; }).right;
 
         var fields = ['solid_fuel','liquid_fuel','gas_fuel','cement_production','gas_flaring'];
+        var xScale = d3.scaleTime()
+            .range([0, stream_width]);
+        xScale.domain(d3.extent(co2, d3.f('date')));
+
+        /* Stream graph */
+        var color = d3.scaleOrdinal()
+          //  .range(['rgb(147, 94, 91)', 'rgb(47, 117, 131)', 'rgb(47, 117, 131', 'rgb(115, 110, 17)','rgb(179, 76, 48)'])
+            .range(['#fee5d9','#fcae91','#fb6a4a','#de2d26','#a50f15'].reverse())
+           // .range(['#a6611a','#dfc27d','#f5f5f5','#80cdc1','#018571'].reverse());
         var stack = d3.stack()
             .keys(fields)
             .order(d3.stackOrderNone)
             .offset(d3.stackOffsetWiggle);
 
         var series = stack(co2);
+        var y = d3.scaleLinear()
+            .domain([0, d3.max(series, function(layer) { return d3.max(layer, function(d){ return d[0] + d[1];}); })])
+            .range([stream_height, 0]);
 
+        var area = d3.area()
+            .x(function(d) { return xScale(d.data.date); })
+            .y0(function(d) { return y(d[0]); })
+            .y1(function(d) { return y(d[1]); })
+            .curve(d3.curveBasis);
+
+        var xStreamTopAxis = d3.axisTop(xScale);
+        var xStreamBottomAxis = d3.axisBottom(xScale);
+
+        var field_names = fields.map(function(field_name) {
+            return fieldName(field_name, true);
+        });
+
+        drawLegend("#co-two-total-legend", color.domain(field_names), true);
+
+        var svg = d3.select("#co-two-total").append("svg")
+            .attr("width", stream_width + margins.left + margins.right)
+            .attr("height", stream_height + margins.top + margins.bottom)
+            .append("g")
+            .attr("class", "stream")
+            .translate([0, -305]);
+
+        svg.selectAll("path")
+            .data(series)
+            .enter().append("path")
+            .attr("d", area)
+            .style("fill", function(d, i) { return color(fields[i]); })
+            .on('mouseover touchstart', function(d) {
+                d3.select(this).style("opacity", .81);
+            })
+            .on("mousemove touchmove", function(d, i) {
+                var inverted = xScale.invert(d3.mouse(this)[0]);
+                var year = inverted.getFullYear();
+                var year_data = _.find(co2, function(d){ return d.year == year; });
+
+                tip.transition()
+                    .duration(100)
+                    .style("opacity", .9);
+
+                tip.html(
+                        '<h5 class="text-center">' + fieldName(fields[i], true) + ' (' + year_data.year + ')</h5>' +
+                            '<ul class="list-unstyled">' +
+                            '<li>Total Levels: ' + num_format(year_data.total) + ' mmt</li>' +
+                            '<li>' + fieldName(fields[i], true) + ' Levels: ' + num_format(year_data[fields[i]]) + ' mmt</li>' +
+                            '</ul>'
+                    )
+                    .style("top", (d3.event.pageY-108)+"px")
+                    .style("left", (d3.event.pageX-110)+"px");
+
+            })
+            .on("mouseout touchend", function(d) {
+                d3.select(this).style("opacity", 1);
+                tip.transition()
+                    .duration(250)
+                    .style("opacity", 0);
+            });
+
+        svg.append("g")
+            .attr("class", "axis")
+            .translate([0, 340])
+            .call(xStreamTopAxis);
+
+        svg.append("g")
+            .attr("class", "axis")
+            .translate([0, 1000])
+            .call(xStreamBottomAxis);
+
+        // Small multiples
         fields.forEach(function(field_name, i) {
             d3.select("#co-two").append("div")
                 .attr("class", "graph")
@@ -58,6 +136,11 @@ d3.queue()
             drawGraph("#graphed" + i, field_name, i);
         });
 
+        var colors = ['#67001f','#b2182b','#d6604d','#f4a582','#fddbc7','#f7f7f7','#d1e5f0','#92c5de','#4393c3','#2166ac','#053061'].reverse();
+        var strip_color = d3.scaleQuantize()
+            .domain(d3.extent(methane, d3.f('mean')))
+            .range(colors);
+        drawLegend("#methane-legend", strip_color, false);
         var methaneScale = d3.scaleTime()
             .range([0, bar_width]);
         methaneScale.domain(d3.extent(methane, d3.f('date')));
@@ -225,6 +308,58 @@ d3.queue()
             }
 
             return chart;
+        }
+
+        function drawLegend(selector, strip_colors, wide) {
+            var width = window.innerWidth;
+            var month_graph = /month/.test(selector);
+            var size, orientation;
+
+            if(width < 900) {
+                size = 40;
+                orientation = 'vertical';
+            } else if(wide) {
+                size = 110;
+                orientation = 'horizontal';
+            } else {
+                size = 90;
+                orientation = 'horizontal';
+            }
+
+            var legend_height = (orientation === 'vertical') ? 230 : 75;
+            var legend_width = (width < 900 || month_graph) ? 130 : width - 10;
+            var class_name = selector.substr(1);
+            var svg = d3.select(selector).append("svg")
+                .classed("legend", true)
+                .attr("width", legend_width)
+                .attr("height", legend_height);
+
+            svg.append("g")
+                .attr("class", "legend-" + class_name)
+                .attr("width", legend_width)
+                .translate([0, 20]);
+
+            var legend = d3.legendColor()
+                .shapeWidth(size)
+                .orient(orientation)
+                .labelFormat(d3.format(".01f"))
+                .scale(strip_colors);
+
+            svg.select(".legend-" + class_name)
+                .call(legend);
+
+            return svg;
+        }
+
+        function annotate(selector, annotations) {
+            var swoopy = d3.swoopyDrag()
+                .x(function(d){ return d.xVal; })
+                .y(function(d){ return d.yVal; })
+                .draggable(0);
+
+            swoopy.annotations(annotations);
+
+            d3.select(selector + " .svg").append("g.annotations").call(swoopy);
         }
 
         function fieldName(field_name, full) {
