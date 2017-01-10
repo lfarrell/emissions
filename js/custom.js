@@ -91,7 +91,7 @@ d3.queue()
             })
             .on("mousemove touchmove", function(d, i) {
                 var inverted = xScale.invert(d3.mouse(this)[0]);
-                var year = inverted.getFullYear(); console.log(year)
+                var year = inverted.getFullYear();
                 var year_data = _.find(co2, function(d){ return d.year == year; });
 
                 tip.transition()
@@ -357,7 +357,7 @@ d3.queue()
         }
 
         function drawLegend(selector, strip_colors, wide) {
-            var width = window.innerWidth; console.log(width)
+            var width = window.innerWidth;
             var month_graph = /month/.test(selector);
             var size, orientation, legend_height;
 
