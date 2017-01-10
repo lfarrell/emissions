@@ -4,9 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="description" content="Visualization of the Temperatures and Carbon Dioxide Levels of the World" />
-    <meta name="keywords" content="Climate Change,Drought,Visualization,Temperatures,Carbon Dioxide" />
-    <title>Temperature Rising</title>
-    <link href="https://fonts.googleapis.com/css?family=Abhaya+Libre|Alegreya|Taviraj" rel="stylesheet">
+    <meta name="keywords" content="Climate Change,Greenhouse Gases,Visualization,Greenhouse Gas Emissions,Carbon Dioxide" />
+    <title>Atmosphere Changed</title>
+    <link href="https://fonts.googleapis.com/css?family=Abhaya+Libre" rel="stylesheet">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/styles.css">
 </head>
@@ -17,68 +17,75 @@
     </div>
     <div class="row hide">
         <div class="col-xs-12 col-sm-12 col-lg-12">
-            <h1 class="text-center">Temperature Rising</h1>
-            <h3 class="text-center">A Look at World Temperature Anomalies & CO<sub>2</sub> Levels</h3>
+            <h1 class="text-center">Atmosphere Changed</h1>
+            <h3 class="text-center">The Rise of Atmospheric CO<sub>2</sub> and Methane Levels</h3>
         </div>
     </div>
     <div class="row charts opaque">
         <div class="col-xs-12 col-offset-sm-1 col-sm-10 col-lg-offset-1 col-lg-10">
-            <p>Temperatures have been slowly rising for a number of years. In the charts below you can see that the late 19th and early
-                20th century were quite cool relative to the rest of the time period, 1880-2016. Temperatures on average continued
-                to rise throughout the 20th century. Notice that there were fewer and fewer instances of below average
-                temperatures. In fact, the last month the world saw below average temperatures was December 1984.
-                Temperature increases really accelerated in the 21st century. December 2015 was the first time world temperatures
-                were more than one degree Celsius or about 1.8 degrees Fahrenheit above average. This started a streak of five straight such months.
-                If this doesn't sound like much, consider that such a rise in your body temperature would likely leave you quite sick.</p>
-            <p>Carbon dioxide, a potent greenhouse gas, was first consistently measured beginning in 1958 by Charles Keeling at the
-                Mauna Loa Observatory in Hawaii. Notice that carbon dioxide levels fluctuate with the seasons, with levels tending to
-                drop during the northern hemisphere's summer as its greater plant mass peaks then. However, the long term
-                trend has shown consistently rising CO<sub>2</sub> levels. Carbon Dioxide levels passed 400 parts per million for a given month in 2014
-                with the long term trend passing 400 parts per million in 2015. CO<sub>2</sub> levels have not been
-                this high in millions of years when temperatures were even warmer than they currently are.</p>
-            <h4 class="text-center">What am I looking at?</h4>
-            <p>Each colored bar represents one month of temperature anomalies or CO<sub>2</sub> levels in the atmosphere. Monthly
-                temperature anomaly measurements date from 1880. Measurements of CO<sub>2</sub> levels in the
-                atmosphere were first measured on a monthly basis in March of 1958. Hover over a bar to see the
-                anomaly/CO<sub>2</sub> levels for that month. Scroll down to see how temperatures and CO<sub>2</sub> levels increase over time.
-                Temperature anomalies are based on climate normals for the 20<sup>th</sup> century.</p>
-            <p></p>
+            <p>Humans have long modified and changed the environment around them. For example, the rise of agriculture, favoring
+                and cultivating certain plants and animals over others, led to reliable food supplies. Agriculture needed reliable
+            water supplies which led to the diversion of rivers and irrigation. There are untold other changes, but until relatively
+            recently in human history these changes were local or regional in nature. Case in point, the level of global CO<sub>2</sub>
+            emissions were minimal and fairly consistent, largely from the burning of wood and some coal. Notice the
+                line indicating CO<sub>2</sub> emissions is barely discernible until roughly the 1850's. The explosion in industrialization levels
+            changed all of this.</p>
+            <p>Even then emission levels largely continued to be from solid fuels: coal, wood, etc. Then, notice the rise of gas fuels starting in the
+            early 1900s that coincides with the rise of cheap, mass produced automobiles such as the Model-T. Emissions from
+                other fuel types really took off after World War Two. Gas fuel,gas flaring  and cement production went from negligible
+                to significant contributors to emissions. Surprisingly, cement production is as a major cause of
+                CO<sub>2</sub> emissions. Cement is a vital part of a huge variety of construction activities. The primary ingredient of cement is
+                limestone. The heating of limestone in the cement manufacturing process results in a significant release of CO<sub>2</sub>.
+                It's also an energy intensive process that requires the burning of large amounts of coal and oil to manufacture.</p>
+            <p>The result of this explosive rise in emission levels, particularly in the 20<sup>th</sup> and 21<sup>st</sup> centuries, has
+                led to large changes in the concentration of CO<sub>2</sub> levels. Even if CO<sub>2</sub> emissions were suddenly reduced to
+                zero it would still take centuries if not millennia for CO<sub>2</sub> concentrations to fall back to pre-industrial levels.
+            Historically the CO<sub>2</sub> level since the rise of human civilization has been roughly about <a href="http://climate.nasa.gov/climate_resources/24/">280 parts per million</a>
+                in the Earth's atmosphere. They're now over 400 parts per million with a consequent rise in <a href="/temp-co-two">world temperatures</a> and
+            a decline in such things as <a href="/sea-ice">world sea ice levels</a>, particularly in the arctic.</p>
         </div>
 
         <div id="temp-graphs" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <h2 class="text-center">Total CO<sub>2</sub> emissions (million metric tons)</h2>
             <div id="co-two-total-legend" class="col-xs-12 col-sm-12 col-md-12 col-lg-12"></div>
             <div id="co-two-total" class="col-xs-12 col-sm-12 col-md-12 col-lg-12"></div>
-            <div id="co-two" class="col-xs-12 col-sm-12 col-md-12 col-lg-12"></div>
+            <p></p>
+            <div id="co-two" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <h3 class="text-center">CO<sub>2</sub> emissions by type (million metric tons)</h3>
+            </div>
             <div id="methane" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <h3 class="text-center">Methane Levels</h3>
+                <p>Methane levels have been rising in concert with CO<sub>2</sub> levels. While not as plentiful, nor as long lasting in the atmosphere as CO<sub>2</sub>
+                methane is a much more potent greenhouse gas, trapping <a href="https://www.epa.gov/ghgemissions/overview-greenhouse-gases">25
+                times more heat</a> than an equivalent amount of CO<sub>2</sub>. The rise in methane levels can be attributed to some of the
+                same causes as CO<sub>2</sub>, such as natural gas production. Some large, if unusual causes of increasing methane levels
+                are trash rotting in dumps and livestock flatulence, particularly from cows. All told it's taken barely 30 years to raise
+                methane levels by almost 200 parts per billion in the atmosphere.</p>
                 <h4 class="text-center">(Parts per Billion)</h4>
                 <div id="methane-legend" class="col-xs-12 col-sm-12 col-md-12 col-lg-12"></div>
             </div>
+            <p></p>
         </div>
-
-        <div class="col-sm-12 col-lg-12">
-            <footer>
-                <ul class="list-unstyled">
-                    <li><a href="../index.php">Other Visualizations</a></li>
-                    <li><a href="../western_water">Western Water</a></li>
-                    <li><a href="mailto:farrelldlfarrell@gmail.com">Email</a></li>
-                    <li><a href="https://twitter.com/farrelldlfarrel">Twitter</a></li>
-                </ul>
-            </footer>
-        </div>
-        <div class="col-sm-12 col-lg-12">
-            <div class="col-md-offset-1 subfooter">
-                <h3 class="text-center">Data Sources</h3>
-                <ul class="list-unstyled text-center">
-                    <li><a href="http://cdiac.ornl.gov/ftp/ndp030/global.1751_2013.ems">Carbon Dioxide Information
+    </div>
+    <div class="row col-sm-12 col-lg-12 hide">
+        <footer>
+            <ul class="list-unstyled">
+                <li><a href="../index.php">Other Visualizations</a></li>
+                <li><a href="../western_water">Western Water</a></li>
+                <li><a href="mailto:farrelldlfarrell@gmail.com">Email</a></li>
+                <li><a href="https://twitter.com/farrelldlfarrel">Twitter</a></li>
+            </ul>
+        </footer>
+    </div>
+    <div class="row col-sm-12 col-lg-12 hide">
+        <div class="col-md-offset-1 subfooter">
+            <h3 class="text-center">Data Sources</h3>
+            <ul class="list-unstyled text-center">
+                <li><a href="http://cdiac.ornl.gov/ftp/ndp030/global.1751_2013.ems">Carbon Dioxide Information
                     Analysis Center</a></li>
-                    <li><a href="ftp://aftp.cmdl.noaa.gov/products/trends/co2/co2_mm_mlo.txt">NOAA; Earth System
-                        Research Laboratory - CO<sub>2</sub></a></li>
-                    <li><a href="ftp://aftp.cmdl.noaa.gov/products/trends/ch4/ch4_annmean_gl.txt">NOAA: Earth System
-                        Research Laboratory - Methane</a></li>
-                </ul>
-            </div>
+                <li><a href="ftp://aftp.cmdl.noaa.gov/products/trends/ch4/ch4_annmean_gl.txt">NOAA: Earth System
+                    Research Laboratory - Methane</a></li>
+            </ul>
         </div>
     </div>
 </div>
@@ -86,10 +93,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.4.0/d3.min.js" charset="utf-8"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.11.0/d3-legend.min.js"></script>
 <script src="js/assets/d3-jetpack-v4.min.js"></script>
-<!--<script src="js/assets/swoopy-drag/swoopy-drag.min.js"></script> -->
-<script src="js/custom.js"></script>
+<script src="js/assets/swoopy-drag/swoopy-drag.min.js"></script>
+<script src="js/custom.min.js"></script>
 <script type="text/javascript">
-  /*  var _gaq = _gaq || [];
+    var _gaq = _gaq || [];
     _gaq.push(['_setAccount', 'UA-47256145-1']);
     _gaq.push(['_trackPageview']);
 
@@ -97,7 +104,7 @@
         var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })(); */
+    })();
 </script>
 </body>
 </html>

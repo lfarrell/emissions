@@ -23,6 +23,10 @@ h1 {
     margin-top: 0px;
 }
 
+g.annotations {
+
+}
+
 .annotations path{
     fill: none;
     stroke: white;
@@ -30,11 +34,6 @@ h1 {
 
 .annotations text {
     font-size: 12.5px;
-}
-
-#arrow {
-    fill: white;
-    stroke: white;
 }
 
 .charts {
@@ -77,6 +76,7 @@ circle {
 .overlay {
     fill: none;
     pointer-events: all;
+    stroke: none;
 }
 
 .focus line {
@@ -105,10 +105,6 @@ text.label {
 
 div svg {
     display: block;
-}
-
-.overlay {
-    stroke: none;
 }
 
 div.tooltip {

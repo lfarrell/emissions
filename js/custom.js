@@ -10,12 +10,16 @@ d3.queue()
         var margins = {top: 45, right: 50, bottom: 50, left: 50},
             height = 300 - margins.top - margins.bottom,
             bar_width = 300,
-            stream_height = 800 - margins.top - margins.bottom,
+            stream_height = 700 - margins.top - margins.bottom,
             stream_width = window.innerWidth - margins.left - margins.right,
             parse_year = d3.timeParse("%Y"),
             num_format = d3.format(",");
 
         var width = 400 - margins.right - margins.left;
+        var screen_width = window.innerWidth - margins.left - margins.right;
+        var offset = (screen_width - bar_width) / 2;
+        var stream_offset = screen_width / 2;
+        var ticks = screen_width < 430 ? 8 : 15;
 
         co2.forEach(function(d) {
             d.date = parse_year(d.year);
@@ -47,7 +51,7 @@ d3.queue()
            // .range(['#a6611a','#dfc27d','#f5f5f5','#80cdc1','#018571'].reverse());
         var stack = d3.stack()
             .keys(fields)
-            .order(d3.stackOrderNone)
+            .order(d3.stackOrderInsideOut)
             .offset(d3.stackOffsetWiggle);
 
         var series = stack(co2);
@@ -61,8 +65,8 @@ d3.queue()
             .y1(function(d) { return y(d[1]); })
             .curve(d3.curveBasis);
 
-        var xStreamTopAxis = d3.axisTop(xScale);
-        var xStreamBottomAxis = d3.axisBottom(xScale);
+        var xStreamTopAxis = d3.axisTop(xScale).ticks(ticks);
+        var xStreamBottomAxis = d3.axisBottom(xScale).ticks(ticks);
 
         var field_names = fields.map(function(field_name) {
             return fieldName(field_name, true);
@@ -74,8 +78,8 @@ d3.queue()
             .attr("width", stream_width + margins.left + margins.right)
             .attr("height", stream_height + margins.top + margins.bottom)
             .append("g")
-            .attr("class", "stream")
-            .translate([0, -305]);
+            .attr("class", "svg")
+            .translate([0, -265]);
 
         svg.selectAll("path")
             .data(series)
@@ -87,7 +91,7 @@ d3.queue()
             })
             .on("mousemove touchmove", function(d, i) {
                 var inverted = xScale.invert(d3.mouse(this)[0]);
-                var year = inverted.getFullYear();
+                var year = inverted.getFullYear(); console.log(year)
                 var year_data = _.find(co2, function(d){ return d.year == year; });
 
                 tip.transition()
@@ -114,12 +118,12 @@ d3.queue()
 
         svg.append("g")
             .attr("class", "axis")
-            .translate([0, 340])
+            .translate([0, 290])
             .call(xStreamTopAxis);
 
         svg.append("g")
             .attr("class", "axis")
-            .translate([0, 1000])
+            .translate([0, 890])
             .call(xStreamBottomAxis);
 
         // Small multiples
@@ -146,6 +150,51 @@ d3.queue()
         methaneScale.domain(d3.extent(methane, d3.f('date')));
 
         drawStrip("#methane", methane);
+
+    /*    var annotations_co2 = [
+            {
+                "xVal": "1800",
+                "yVal": 2000,
+                "path": "M301,116L301,38",
+                "text": "Nothing much happening",
+                "textOffset": [(stream_offset *.4),19]
+            },
+            {
+                "xVal": "1908",
+                "yVal": 2000,
+                "path": "M" + (offset * 1.795) + ",95L" + (offset * 1.795) + ",35",
+                "text": "Model T released",
+                "textOffset": [(stream_offset * 1.24),20]
+            },
+            {
+                "xVal": "1945",
+                "yVal": 2000,
+                "path": "M" + (offset * 2.18) + ",94L" + (offset * 2.18) + ",48",
+                "text": "World War II ends",
+                "textOffset": [(stream_offset * 1.53),32]
+            }
+        ]; // 6, 5, 87
+        annotate("#co-two-total", annotations_co2, xScale, y); */
+        d3.selectAll("#co-two-total .annotations").translate([-(stream_offset * 1.8), 0]);
+
+        var annotations_methane = [
+            {
+                "xVal": "1989",
+                "yVal": 0,
+                "path": "M" +(offset + 200) + ",94L" +(offset + 188) + ",67",
+                "text": "Level passes 1,700 ppb",
+                "textOffset": [offset+120,107]
+            },
+            {
+                "xVal": "2011",
+                "yVal": 0,
+                "path": "M" +(offset + 380) + ",95L"  +(offset + 400) + ",64",
+                "text": "Level passes 1,800 ppb",
+                "textOffset": [offset + 300,107]
+            }
+        ];
+
+        annotate("#methane", annotations_methane, methaneScale);
 
         function drawGraph(selector, field, i) {
             var data = (isNaN(i)) ? methane : co2;
@@ -210,9 +259,6 @@ d3.queue()
                 field = 'mean';
                 date_type = 'date';
             }
-
-            var screen_width = window.innerWidth - margins.left - margins.right;
-            var offset = (screen_width - bar_width) / 2;
 
             var strip = d3.select(selector).append("svg")
                 .attr("width", screen_width)
@@ -311,12 +357,12 @@ d3.queue()
         }
 
         function drawLegend(selector, strip_colors, wide) {
-            var width = window.innerWidth;
+            var width = window.innerWidth; console.log(width)
             var month_graph = /month/.test(selector);
-            var size, orientation;
+            var size, orientation, legend_height;
 
-            if(width < 900) {
-                size = 40;
+            if(width < 1090) {
+                size = 60;
                 orientation = 'vertical';
             } else if(wide) {
                 size = 110;
@@ -326,8 +372,15 @@ d3.queue()
                 orientation = 'horizontal';
             }
 
-            var legend_height = (orientation === 'vertical') ? 230 : 75;
-            var legend_width = (width < 900 || month_graph) ? 130 : width - 10;
+            if(orientation === 'vertical' && wide) {
+                legend_height = 130;
+            } else if(orientation === 'vertical') {
+                legend_height = 240;
+            } else {
+               legend_height = 75;
+            }
+
+            var legend_width = (width < 1090 || month_graph) ? 200 : width - 10;
             var class_name = selector.substr(1);
             var svg = d3.select(selector).append("svg")
                 .classed("legend", true)
@@ -351,10 +404,10 @@ d3.queue()
             return svg;
         }
 
-        function annotate(selector, annotations) {
+        function annotate(selector, annotations, xScale, yScale) {
             var swoopy = d3.swoopyDrag()
-                .x(function(d){ return d.xVal; })
-                .y(function(d){ return d.yVal; })
+                .x(function(d){ return xScale(d.xVal); })
+                .y(function(d){ return (yScale !== undefined) ? yScale(d.yVal) : d.yVal; })
                 .draggable(0);
 
             swoopy.annotations(annotations);
